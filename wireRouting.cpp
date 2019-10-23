@@ -10,10 +10,10 @@ class Routing
     	void input();
 	void pathFinding();
 	void DistanceLabelling();
-	void left(int,int);
-	void right(int,int);
-	void up(int,int);
-	void down(int,int);
+	void left(int,int,int);
+	void right(int,int,int);
+	void up(int,int,int);
+	void down(int,int,int);
 };
 void Routing::input()
 {
@@ -33,7 +33,7 @@ void Routing::input()
 	cout<<"Enter coordinates of b: ";
 	cin>>b[0]>>b[1];
 }
-void Routing::left(int i,int j)
+void Routing::left(int i,int j,int cnt)
 {
 	if(i==b[0]&&j==b[1])
 	{
@@ -41,78 +41,69 @@ void Routing::left(int i,int j)
 	}
 	else if(mesh[i][j-1]==1)
 	    {
-			mesh[i][j-1]=count;
-			left(i,j-1);
-			up(i,j-1);
-			right(i,j-1);
-			down(i,j-1);
+			mesh[i][j-1]=cnt;
+			left(i,j-1,cnt+1);
+			up(i,j-1,cnt+1);
+			//right(i,j-1,cnt+1);
+			down(i,j-1,cnt+1);
 	    }else
 		return;
 }
-void Routing::right(int i,int j)
+void Routing::right(int i,int j,int cnt)
 {
 if(i==b[0]&&j==b[1])
 {
 return;
 }
-	if(mesh[i][j+1]==1)
+	if(mesh[i][j+1]!=0)
 	    {
-			mesh[i][j+1]=count;
-			left(i,j+1);
-			up(i,j+1);
-			right(i,j+1);
-			down(i,j+1);
+			mesh[i][j+1]=cnt;
+			//left(i,j+1,cnt+1);
+			up(i,j+1,cnt+1);
+			right(i,j+1,cnt+1);
+			down(i,j+1,cnt+1);
 	    }else
 		return;
 }
-void Routing::up(int i,int j)
+void Routing::up(int i,int j,int cnt)
 {
 	if(i==b[0]&&j==b[1])
 	{
 		return;
 	}
-	if(mesh[i-1][j]==1)
+	if(mesh[i-1][j]!=0&&j!=0)
 	    {
-			mesh[i-1][j-1]=count;
-			left(i-1,j);
-			up(i-1,j);
-			right(i-1,j);
-			down(i-1,j);
+			mesh[i-1][j-1]=cnt;
+			left(i-1,j,cnt+1);
+			up(i-1,j,cnt+1);
+			right(i-1,j,cnt+1);
+			//down(i-1,j,cnt+1);
 	    }else
 return;
 }
-void Routing::down(int i,int j)
+void Routing::down(int i,int j,int cnt)
 {
 if(i==b[0]&&j==b[1])
 {
 return;
 }
-	if(mesh[i+1][j]==1)
+	if(mesh[i+1][j]!=0)
 	    {
-			mesh[i+1][j]=count;
-			left(i+1,j);
-			up(i+1,j);
-			right(i+1,j);
-			down(i+1,j);
+			mesh[i+1][j]=cnt;
+			left(i+1,j,cnt+1);
+			//up(i+1,j,cnt+1);
+			right(i+1,j,cnt+1);
+			down(i+1,j,cnt+1);
 	    }else
 return;
 }
 void Routing::DistanceLabelling()
 {
-	for(int i=a[0];i<size;i++)
-	{
-		for(int j=a[1];j<size;j++)
-		{
-			while(i!=b[0]&&j!=b[1])
-			{
-				left(i+1,j);
-				up(i+1,j);
-				right(i+1,j);
-				down(i+1,j);
-			}
-			count++;
-		}
-	}
+	
+				left(i+1,j,2);
+				up(i+1,j,2);
+				right(i+1,j,2);
+				down(i+1,j,2);
 	for(int i=0;i<size;i++)
 	{
 		for(int j=0;j<size;j++)
